@@ -11,9 +11,10 @@ def build_requires():
     # check if the system gcc is too old <9
     # then we require devtoolset-9
     from subprocess import check_output
-    valid = check_output(r"expr `gcc -dumpversion | cut -f1 -d.` \>= 9 || true", shell=True).strip().decode() == "1"
-    if not valid:
+    gcc_major = int(check_output(r"gcc -dumpversion | cut -f1 -d.", shell=True).strip().decode())
+    if gcc_major < 9:
         return ["devtoolset-9"]
+
     return []
 
 requires = [
