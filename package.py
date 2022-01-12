@@ -1,12 +1,17 @@
 name = "libraw"
 
-version = "0.20.2"
+@early() # type: ignore
+def version():
+    from datetime import datetime
+    version = "master-{}".format(datetime.now().strftime("%Y%m%d"))
+    #version = "0.20.2"
+    return version
 
 variants = [
     ["platform-linux"]
 ]
 
-@early()
+@early() # type: ignore
 def build_requires():
     # check if the system gcc is too old <9
     # then we require devtoolset-9
