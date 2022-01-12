@@ -55,7 +55,7 @@ build: $(SOURCE_DIR) # configure and build
 ifeq "$(TAG)" "NOT_SET"
 	$(warn "No version was specified, provide one with: VERSION=0.20.2")
 else
-	cd $(SOURCE_DIR)  && git checkout $(TAG)\
+	cd $(SOURCE_DIR)  && git checkout $(TAG) && git pull \
 	&& autoreconf --install \
 	&& CPPFLAGS="-I$(JPEG_ROOT)/include" LDFLAGS="-L$(JPEG_ROOT)/lib64" \
 	./configure --prefix=$(PREFIX) && make
