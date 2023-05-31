@@ -1,11 +1,6 @@
 name = "libraw"
 
-@early() # type: ignore
-def version():
-    from datetime import datetime
-    version = "master-{}".format(datetime.now().strftime("%Y%m%d"))
-    #version = "0.20.2"
-    return version
+version = "0.21.1"
 
 variants = [
     ["platform-linux"]
