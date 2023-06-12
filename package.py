@@ -1,6 +1,6 @@
 name = "libraw"
 
-version = "0.21.1"
+version = "0.21.1.1"
 
 variants = [
     ["platform-linux"]

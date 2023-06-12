@@ -10,12 +10,12 @@ REZ_BUILD_PATH ?= $(BUILD_ROOT)
 REZ_JPEGTURBO_ROOT ?= /usr/local
 
 # Source
-#VERSION ?= $(REZ_BUILD_PROJECT_VERSION)
+VERSION ?= $(shell echo $(REZ_BUILD_PROJECT_VERSION) | cut -d . -f -3) # allow us to add our own extra version number
 #ARCHIVE_URL := https://www.libraw.org/data/LibRaw-$(VERSION).tar.gz
 #LOCAL_ARCHIVE := $(BUILD_ROOT)/LibRaw.$(VERSION).tar.gz
 
 # Source
-TAG ?= $(REZ_BUILD_PROJECT_VERSION)
+TAG ?= $(VERSION)
 REPOSITORY_URL := https://github.com/LibRaw/LibRaw.git
 
 ifneq (,$(findstring master,$(TAG)))
@@ -39,6 +39,9 @@ PREFIX ?= ${REZ_BUILD_INSTALL_PATH}
 
 JPEG_ROOT ?= $(REZ_JPEGTURBO_ROOT)
 
+CPPFLAGS := "-I$(JPEG_ROOT)/include -DLIBRAW_MAX_ALLOC_MB_DEFAULT=16384L"
+LDFLAGS := "-L$(JPEG_ROOT)/lib64"
+
 .PHONY: build install test clean
 .DEFAULT_GOAL := build
 
@@ -55,10 +58,9 @@ build: $(SOURCE_DIR) # configure and build
 ifeq "$(TAG)" "NOT_SET"
 	$(warn "No version was specified, provide one with: VERSION=0.20.2")
 else
-	cd $(SOURCE_DIR)  && git fetch && git checkout $(TAG) \
+	cd $(SOURCE_DIR) && git fetch && git checkout $(TAG) \
 	&& autoreconf --install \
-	&& CPPFLAGS="-I$(JPEG_ROOT)/include" LDFLAGS="-L$(JPEG_ROOT)/lib64" \
-	./configure --prefix=$(PREFIX) && make
+	&& CPPFLAGS=$(CPPFLAGS) LDFLAGS=$(LDFLAGS) ./configure --prefix=$(PREFIX) && make
 endif
 
 install: build
