@@ -6,16 +6,9 @@ variants = [
     ["platform-linux"]
 ]
 
-@early() # type: ignore
-def build_requires():
-    # check if the system gcc is too old <9
-    # then we require devtoolset-9
-    from subprocess import check_output
-    gcc_major = int(check_output(r"gcc -dumpversion | cut -f1 -d.", shell=True).strip().decode())
-    if gcc_major < 9:
-        return ["devtoolset-9"]
-
-    return []
+private_build_requires = [
+    "gcc-11"
+]
 
 requires = [
     "jpegturbo-2"
